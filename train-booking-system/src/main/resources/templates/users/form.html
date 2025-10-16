@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Form</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<form th:action="${user.id == null} ? @{/users} : @{/users/update/{id}(id=${user.id})}" 
+      th:object="${user}" method="post" id="userForm" novalidate>
+    <h1 th:if="${user.id == null}"> Login </h1>
+    
+
+    <label for="name">Name:
+        <input type="text" th:field="*{name}" id="name" required minlength="2" />
+        <span class="error-message" id="nameError">Please enter a valid name (at least 2 characters).</span>
+    </label>
+
+    <label for="email">Email:
+        <input type="email" th:field="*{email}" id="email" required />
+        <span class="error-message" id="emailError">Please enter a valid email address.</span>
+    </label>
+
+    <button type="submit" id="submitBtn" disabled>Save</button>
+</form>
+
+<script>
+    const form = document.getElementById('userForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const submitBtn = document.getElementById('submitBtn');
+    const nameError = document.getElementById('nameError');
+    const emailError = document.getElementById('emailError');
+
+    function validateName() {
+        const value = nameInput.value.trim();
+        if (value.length < 2) {
+            nameError.style.display = 'block';
+            return false;
+        } else {
+            nameError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateEmail() {
+        const value = emailInput.value.trim();
+        // Simple email regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            emailError.style.display = 'block';
+            return false;
+        } else {
+            emailError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateForm() {
+        const nameValid = validateName();
+        const emailValid = validateEmail();
+        submitBtn.disabled = !(nameValid && emailValid);
+    }
+
+    nameInput.addEventListener('input', validateForm);
+    emailInput.addEventListener('input', validateForm);
+
+    // On form submit, final validation
+    form.addEventListener('submit', function(event) {
+        validateForm();
+        if (submitBtn.disabled) {
+            event.preventDefault();
+        }
+    });
+
+    // Initial validation on page load in case of pre-filled data
+    document.addEventListener('DOMContentLoaded', validateForm);
+</script>
+</body>
+</html>

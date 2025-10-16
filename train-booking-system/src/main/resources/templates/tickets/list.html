@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tickets</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<div class="container">
+    <h1>Tickets List</h1>
+    <a href="/tickets/new" class="new-ticket">Book New Ticket</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>User Name</th>
+            <th>Train Name</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Final Price</th>
+            <th>Booking Date</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="ticket : ${tickets}">
+            <td th:text="${ticket.id}"></td>
+            <td th:text="${ticket.user != null ? ticket.user.name : 'N/A'}"></td>
+            <td th:text="${ticket.train != null ? ticket.train.name : 'N/A'}"></td>
+            <td th:text="${ticket.train != null ? ticket.train.source : 'N/A'}"></td>
+            <td th:text="${ticket.train != null ? ticket.train.destination : 'N/A'}"></td>
+            <td th:text="${ticket.finalPrice}"></td>
+            <td th:text="${ticket.bookingDate}"></td>
+            <td class="actions">
+                <a th:href="@{/tickets/edit/{id}(id=${ticket.id})}">Edit</a> |
+                <a th:href="@{/tickets/delete/{id}(id=${ticket.id})}">Delete</a>
+            </td>
+        </tr>
+    </table>
+ </div>   
+
+</body>
+</html>

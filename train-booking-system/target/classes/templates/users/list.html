@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<div class="container">
+    <h1>Users</h1>
+    <a href="/users/new" class="add-user">Add New User</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+                <a th:href="@{/users/edit/{id}(id=${user.id})}" class="action-link">Edit</a>
+                <a href="#" th:onclick="'return confirmDelete(' + ${user.id} + ');'" class="action-link delete-link">Delete</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function confirmDelete(userId) {
+        if(confirm('Are you sure you want to delete user with ID ' + userId + '?')) {
+            // Redirect to the actual delete URL after confirmation
+            window.location.href = '/users/delete/' + userId;
+            return true;
+        }
+        return false;
+    }
+</script>
+</body>
+</html>
